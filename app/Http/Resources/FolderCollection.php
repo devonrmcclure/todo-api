@@ -14,15 +14,15 @@ class FolderCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-		return  $this->collection;
-	}
+        return  $this->collection;
+    }
 
-	public function with($request)
-	{
-		return [
-			'links' => [
-				'self' => route('folders.index')
-			]
-		];
-	}
+    public function with($request)
+    {
+        return [
+            'links' => [
+                'self' => route('folders.index')
+            ]
+        ];
+    }
 }

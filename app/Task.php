@@ -6,32 +6,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-	protected $fillable = [
-		'title', 'description', 'owner_id', 'status_id', 'due_at', 'completed_at'
-	];
+    protected $fillable = [
+        'title', 'description', 'owner_id', 'status_id', 'due_at', 'completed_at'
+    ];
 
-	public function path()
-	{
-		return '/api/tasks/' . $this->id;
-	}
+    protected $dates = [
+        'due_at'
+    ];
 
-	public function folders()
-	{
-		return $this->belongsToMany('App\Folder');
-	}
+    public function path()
+    {
+        return '/api/tasks/' . $this->id;
+    }
 
-	public function user()
-	{
-		return $this->belongsTo('App\User');
-	}
+    public function folders()
+    {
+        return $this->belongsToMany('App\Folder');
+    }
 
-	public function complete()
-	{
-		$this->update(['completed_at' => $this->freshTimestamp()]);
-	}
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 
-	public function uncomplete()
-	{
-		$this->update(['completed_at' => null]);
-	}
+    public function complete()
+    {
+        $this->update(['completed_at' => $this->freshTimestampString()]);
+    }
+
+    public function uncomplete()
+    {
+        $this->update(['completed_at' => null]);
+    }
 }

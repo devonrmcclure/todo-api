@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\TaskCollection;
 
-class Folder extends JsonResource
+class User extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +16,8 @@ class Folder extends JsonResource
     {
         return [
             'name' => $this->name,
-            'tasks' => new TaskCollection($this->whenLoaded('tasks')),
-            'links' => [
-                'self' => route('folders.show', ['folders' => $this->id])
-            ]
+            'email' => $this->email,
+            'created' => (string)$this->created_at
         ];
     }
 }

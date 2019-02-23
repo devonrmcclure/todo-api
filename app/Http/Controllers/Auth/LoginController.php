@@ -10,33 +10,28 @@ use App\Traits\PasswordGrantProxy;
 class LoginController extends Controller
 {
     use PasswordGrantProxy;
-	
-	public function login(Request $request)
-	{
-		$credentials = $request->only(['email', 'password']);
-		$user;
 
-		if (auth()->attempt($credentials)) {
-			$token = self::getToken($request);
+    public function login(Request $request)
+    {
+        $credentials = $request->only(['email', 'password']);
 
-			if ($token->getStatusCode() != 200) {
-				return response()->json($token->getContent());
-			}
+        try {
+            auth()->attempt($credentials);
+            $token = self::getToken($request);
 
-			return self::formatResponse(auth()->user(), json_decode($token->getContent()));
-		}
+            return self::formatResponse(auth()->user(), json_decode($token->getContent()));
+            // TODO: Create custom exception to throw in PasswordGrantProxy.php and catch here.
+        } catch (\Error $e) {
+            return response()->json(['message' => $e->getMessage()])->setStatusCode($e->getCode());
+        }
+    }
 
-		return response()->json([
-			'message' => 'Invalid credentials'
-		])->setStatusCode(401);
-	}
-
-	protected function formatResponse($user, $token)
-	{
-		return response()->json([
-			'name' => $user['name'],
-			'email' => $user['email'],
-			'token' => $token
-		], 200);
-	}
+    protected function formatResponse($user, $token)
+    {
+        return response()->json([
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'token' => $token->data
+        ], 200);
+    }
 }

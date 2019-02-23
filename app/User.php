@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, Notifiable;
 
@@ -26,21 +26,21 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
-	];
+        'password', 'remember_token', 'email_verified_at',
+    ];
 
-	public function path() 
-	{
-		return '/api/users/' . $this->id;
-	}
+    public function path()
+    {
+        return '/api/users/' . $this->id;
+    }
 
-	public function folders()
-	{
-		return $this->hasMany('App\Folder', 'owner_id');
-	}
+    public function folders()
+    {
+        return $this->hasMany('App\Folder', 'owner_id');
+    }
 
-	public function tasks()
-	{
-		return $this->hasMany('App\Task', 'owner_id');
-	}
+    public function tasks()
+    {
+        return $this->hasMany('App\Task', 'owner_id');
+    }
 }

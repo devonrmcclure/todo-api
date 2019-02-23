@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Folder extends Model
 {
-	public function user()
-	{
-		return $this->belongsTo('App\User', 'owner_id');
-	}
+    protected $fillable = ['name', 'owner_id'];
 
-	public function tasks()
-	{
-		return $this->hasMany('App\Task');
-	}
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'owner_id');
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany('App\Task');
+    }
 }
